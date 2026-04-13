@@ -1,14 +1,12 @@
 import { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useSpring, AnimatePresence } from 'framer-motion';
 import { 
-  Globe, 
-  Sparkles,
   ArrowRight,
-  Code2,
-  Cpu,
-  Database,
-  Layers,
-  Zap
+  TrendingUp,
+  BarChart3,
+  PieChart,
+  Globe,
+  Phone
 } from 'lucide-react';
 
 import profileImg from './assets/hero.png';
@@ -20,22 +18,22 @@ const LoadingScreen = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((prev) => (prev < 100 ? prev + 1 : 100));
-    }, 20);
+    }, 15);
     return () => clearInterval(timer);
   }, []);
 
   return (
     <motion.div 
       className="loading-screen"
-      exit={{ opacity: 0, y: -100 }}
-      transition={{ duration: 0.8, ease: "easeInOut" }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1 }}
     >
       <motion.div 
         className="loader-logo"
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
       >
-        TUAN LE<span style={{ color: '#3b82f6' }}>.</span>
+        M. PHAM
       </motion.div>
       <div className="loader-bar-bg">
         <motion.div 
@@ -49,58 +47,49 @@ const LoadingScreen = () => {
   );
 };
 
-const ProjectCard = ({ title, description, tags, delay }: any) => {
-  const ref = useRef(null);
-  
-  return (
-    <motion.div 
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay }}
-      className="crystal-panel card-3d"
-    >
-      <div className="badge" style={{ marginBottom: '15px' }}>Project</div>
-      <h3 style={{ fontSize: '1.8rem', marginBottom: '15px', fontWeight: 700 }}>{title}</h3>
-      <p style={{ color: '#64748b', marginBottom: '25px' }}>{description}</p>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '30px' }}>
-        {tags.map((tag: string) => (
-          <span key={tag} style={{ background: '#f1f5f9', padding: '5px 12px', borderRadius: '100px', fontSize: '0.8rem', color: '#334155', fontWeight: 600 }}>
-            {tag}
-          </span>
-        ))}
-      </div>
-      <motion.a 
-        href="#"
-        whileHover={{ x: 5 }}
-        style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#3b82f6', textDecoration: 'none', fontWeight: 700 }}
-      >
-        View Details <ArrowRight size={18} />
-      </motion.a>
-    </motion.div>
-  );
-};
-
-const TechItem = ({ icon: Icon, label }: any) => (
+const ExperienceCard = ({ company, role, location, date, descs }: any) => (
   <motion.div 
-    whileHover={{ y: -5 }}
-    style={{ 
-      display: 'flex', 
-      alignItems: 'center', 
-      gap: '8px', 
-      padding: '8px 16px', 
-      background: 'white', 
-      borderRadius: '100px',
-      border: '1px solid #e2e8f0',
-      boxShadow: '0 5px 15px rgba(0,0,0,0.03)',
-      fontSize: '0.9rem',
-      fontWeight: 600,
-      color: '#334155'
-    }}
+    initial={{ opacity: 0, x: -20 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    viewport={{ once: true }}
+    className="exp-card"
   >
-    <Icon size={16} color="#3b82f6" />
-    {label}
+    <div className="exp-date">
+      {date}
+      <br />
+      <span style={{ fontSize: '0.7rem', color: '#64748b' }}>{location}</span>
+    </div>
+    <div className="exp-info">
+      <h3>{company}</h3>
+      <div className="exp-role">{role}</div>
+      <div className="exp-desc">
+        <ul>
+          {descs.map((desc: string, i: number) => (
+            <li key={i}>{desc}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const ProjectCard = ({ title, description, badge }: any) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 30 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    className="crystal-panel card-3d"
+  >
+    <span className="badge">{badge}</span>
+    <h3 style={{ fontSize: '1.8rem', marginBottom: '15px' }}>{title}</h3>
+    <p style={{ color: 'var(--text-muted)', marginBottom: '30px', flex: 1 }}>{description}</p>
+    <motion.a 
+      href="#"
+      whileHover={{ x: 10 }}
+      style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--accent-primary)', textDecoration: 'none', fontSize: '0.8rem', letterSpacing: '2px', textTransform: 'uppercase', fontWeight: 600 }}
+    >
+      View Case Study <ArrowRight size={14} />
+    </motion.a>
   </motion.div>
 );
 
@@ -112,7 +101,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2500); 
+    }, 2000); 
     return () => clearTimeout(timer);
   }, []);
 
@@ -131,8 +120,8 @@ function App() {
           top: 0, 
           left: 0, 
           right: 0, 
-          height: '4px', 
-          background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)', 
+          height: '2px', 
+          background: 'var(--accent-primary)', 
           zIndex: 2000,
           transformOrigin: '0%' 
         }} 
@@ -140,85 +129,57 @@ function App() {
 
       {!loading && (
         <motion.div 
-          className="entrance-ready"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
           <nav>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ width: '40px', height: '40px', background: '#3b82f6', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 700 }}>TL</div>
-              <span style={{ fontWeight: 800, fontSize: '1.25rem' }}>Tuan Le</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+              <span className="serif" style={{ fontWeight: 700, fontSize: '1.5rem', letterSpacing: '-1px' }}>M. PHAM</span>
             </div>
             <ul className="nav-links">
-              <li><a href="#about" style={{ fontWeight: 600 }}>About</a></li>
-              <li><a href="#experience" style={{ fontWeight: 600 }}>Exp</a></li>
-              <li><a href="#projects" style={{ fontWeight: 600 }}>Work</a></li>
-              <li><a href="#skills" style={{ fontWeight: 600 }}>Skills</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#experience">Experience</a></li>
+              <li><a href="#projects">Work</a></li>
+              <li><a href="#skills">Capabilities</a></li>
             </ul>
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{ 
-                background: '#1e293b', 
-                color: 'white', 
-                border: 'none', 
-                padding: '12px 28px', 
-                borderRadius: '100px', 
-                fontWeight: 700 
-              }}
-            >
-              Contact Me
-            </motion.button>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <a href="mailto:np66@fordham.edu" style={{ color: 'white' }}><Globe size={18} /></a>
+              <a href="#" style={{ color: 'white' }}><Globe size={18} /></a>
+            </div>
           </nav>
 
-          <main style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+          <main>
             <section className="hero">
               <motion.div 
                 className="hero-content"
-                initial={{ opacity: 0, x: -100 }}
+                initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1, delay: 0.2 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '25px' }}>
-                  <div style={{ padding: '6px 18px', background: '#3b82f6', color: 'white', borderRadius: '100px', fontSize: '0.85rem', fontWeight: 800 }}>
-                    NORTHEASTERN UNIVERSITY
-                  </div>
-                  <Sparkles size={18} color="#f59e0b" fill="#f59e0b" />
-                </div>
-                
+                <span className="hero-subtitle">Fordham University • Finance</span>
                 <h1 className="hero-title">
-                  Software & <br />
-                  <span className="gradient-text">AI Engineer</span>
+                  Nguyen Trong <br />
+                  <span className="gradient-text">Minh Pham</span>
                 </h1>
                 
-                <p style={{ fontSize: '1.5rem', color: '#475569', marginBottom: '40px', maxWidth: '650px', fontWeight: 600, lineHeight: '1.4' }}>
-                  Building scalable agents and full-stack ecosystems. 
-                  Bridging <span style={{ color: '#3b82f6' }}>Machine Intelligence</span> with <span style={{ color: '#8b5cf6' }}>Modern Architecture.</span>
+                <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '50px', maxWidth: '600px', fontWeight: 300, lineHeight: '1.8' }}>
+                  Strategic analyst focused on <span style={{ color: 'white' }}>Investment Banking</span> and <span style={{ color: 'white' }}>Capital Markets</span>. 
+                  Leveraging rigorous financial modeling to drive value in high-stakes environments.
                 </p>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '50px' }}>
-                  <TechItem icon={Globe} label="Next.js" />
-                  <TechItem icon={Code2} label="Python" />
-                  <TechItem icon={Zap} label="LangChain" />
-                  <TechItem icon={Cpu} label="TensorFlow" />
-                  <TechItem icon={Database} label="PostgreSQL" />
-                  <TechItem icon={Layers} label="Docker" />
-                </div>
-
-                <div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ display: 'flex', gap: '30px' }}>
                   <motion.button 
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="crystal-panel"
-                    style={{ background: '#3b82f6', color: 'white', padding: '20px 45px', border: 'none', fontWeight: 800, fontSize: '1.1rem' }}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{ background: 'var(--accent-primary)', color: 'black', padding: '18px 40px', border: 'none', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer' }}
                   >
-                    Work Experience
+                    View Portfolio
                   </motion.button>
                   <motion.button 
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    style={{ background: 'transparent', padding: '20px 45px', border: '2px solid #cbd5e1', borderRadius: '24px', fontWeight: 800 }}
+                    whileHover={{ scale: 1.02, background: 'rgba(255,255,255,0.05)' }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{ background: 'transparent', padding: '18px 40px', border: '1px solid var(--glass-border)', color: 'white', fontWeight: 700, fontSize: '0.9rem', letterSpacing: '1px', textTransform: 'uppercase', cursor: 'pointer' }}
                   >
                     Download CV
                   </motion.button>
@@ -227,74 +188,155 @@ function App() {
 
               <motion.div 
                 className="hero-image-container"
-                initial={{ opacity: 0, scale: 0.8 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.4 }}
+                transition={{ duration: 1.5, delay: 0.4 }}
               >
-                <div className="main-img-wrapper crystal-panel" style={{ borderRadius: '50px', background: 'white' }}>
-                  <div className="photo-badge" style={{ zIndex: 10 }}>GPA 4.0/4.0 Scholar</div>
-                  <img src={profileImg} alt="Tuan Le" className="main-img" />
+                <div className="main-img-wrapper">
+                  <div className="photo-badge">GPA 3.75 / 4.0</div>
+                  <img src={profileImg} alt="Minh Pham" className="main-img" />
                 </div>
               </motion.div>
             </section>
 
-            <section style={{ padding: '80px 0' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '30px' }}>
-                {[
-                  { label: 'TOP-TIER GPA', value: '4.0', sub: 'Northeastern University' },
-                  { label: 'SYSTEMS', value: '100K+', sub: 'Market Data Points' },
-                  { label: 'AI PROJECTS', value: '15+', sub: 'Deployed Solutions' }
-                ].map((stat, i) => (
-                  <motion.div 
-                    key={i}
-                    className="crystal-panel"
-                    style={{ padding: '40px 30px', textAlign: 'center' }}
-                  >
-                    <div style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: 800, textTransform: 'uppercase', marginBottom: '12px' }}>{stat.label}</div>
-                    <div className="gradient-text" style={{ fontSize: '3rem', marginBottom: '8px', fontWeight: 800 }}>{stat.value}</div>
-                    <div style={{ fontSize: '0.9rem', color: '#94a3b8', fontWeight: 600 }}>{stat.sub}</div>
-                  </motion.div>
-                ))}
-              </div>
-            </section>
-
-            <section id="experience" style={{ padding: '150px 0' }}>
-              <div style={{ textAlign: 'center', marginBottom: '80px' }}>
-                <h2 className="hero-title" style={{ fontSize: '4rem' }}>Experience</h2>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
-                {[
-                  { company: "FinbudAI", role: "Software Engineer Intern", date: "Jan 2026 – Pres", desc: "Architected quant-trading platforms." },
-                  { company: "Career Hub", role: "Full-stack Intern", date: "Sep – Dec 2025", desc: "Led UI overhaul & tech docs." }
-                ].map((exp, i) => (
-                  <div key={i} className="crystal-panel" style={{ padding: '50px', display: 'flex', justifyContent: 'space-between' }}>
-                    <div>
-                      <h3 style={{ fontSize: '2.2rem', fontWeight: 800 }}>{exp.company}</h3>
-                      <p className="gradient-text" style={{ fontWeight: 800 }}>{exp.role}</p>
-                      <p style={{ color: '#64748b' }}>{exp.desc}</p>
+            <section id="about" style={{ borderTop: '1px solid var(--glass-border)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '100px', alignItems: 'center' }}>
+                <div>
+                  <h2 className="section-title">The Foundation</h2>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: '2', marginBottom: '30px' }}>
+                    My journey into finance was sparked by the 2008 financial crisis—a pivotal moment that revealed the complexities of global systems and the critical importance of capital allocation.
+                  </p>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', lineHeight: '2' }}>
+                    Today, I combine technical proficiency in 3-statement modeling and DCF valuation with a strategic mindset developed through auditing and equity research. I am driven by the intersection of rigorous data analysis and high-impact decision making.
+                  </p>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
+                  {[
+                    { icon: TrendingUp, label: 'Modeling', val: 'DCF / LBO' },
+                    { icon: BarChart3, label: 'Analytics', val: 'Equity Research' },
+                    { icon: PieChart, label: 'Assets', val: 'Multi-Family/Real Estate' },
+                    { icon: Globe, label: 'Markets', val: 'Global Macros' }
+                  ].map((item, i) => (
+                    <div key={i} className="crystal-panel" style={{ padding: '30px', textAlign: 'center' }}>
+                      <item.icon size={24} color="var(--accent-primary)" style={{ marginBottom: '15px' }} />
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>{item.label}</div>
+                      <div style={{ fontWeight: 600, marginTop: '5px' }}>{item.val}</div>
                     </div>
-                    <div className="badge">{exp.date}</div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </section>
 
-            <section id="projects" style={{ padding: '150px 0' }}>
-              <h2 style={{ fontSize: '3.5rem', fontWeight: 800, marginBottom: '60px' }}>Featured Works</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '40px' }}>
-                <ProjectCard title="FinDeep" description="Multi-agent LLM systems." tags={["Python", "LangChain"]} delay={0.1} />
-                <ProjectCard title="Recipe Gen" description="REST API based discovery." tags={["Node.js", "React"]} delay={0.2} />
+            <section id="experience">
+              <h2 className="section-title">Professional Tenure</h2>
+              <div style={{ marginTop: '40px' }}>
+                <ExperienceCard 
+                  company="FinBudAI"
+                  role="Financial Analyst Intern"
+                  location="Chicago, IL"
+                  date="Aug 2025 — Present"
+                  descs={[
+                    "Performed equity valuation on Tesla, Goldman Sachs, and Blackstone using DCF and Comps.",
+                    "Analyzed 10+ macroeconomic indicators identifying key valuation drivers.",
+                    "Produced data-driven investment pitch decks influencing internal portfolio strategy."
+                  ]}
+                />
+                <ExperienceCard 
+                  company="Capital Auditing Consultancy (CACC)"
+                  role="Accounting Intern"
+                  location="Hanoi, Vietnam"
+                  date="May 2024 — June 2024"
+                  descs={[
+                    "Supported audit procedures across 10+ client engagements including data validation.",
+                    "Reconciled 500+ financial data entries improving reporting reliability.",
+                    "Verified compliance with international accounting standards."
+                  ]}
+                />
+                <ExperienceCard 
+                  company="ASEAN Fintech Research"
+                  role="Finance Research Assistant"
+                  location="ResearchGate / SSRN"
+                  date="Sep 2024 — Dec 2024"
+                  descs={[
+                    "Analyzed 20+ academic papers on fintech adoption across ASEAN markets.",
+                    "Identified positive correlation between financial literacy and fintech usage."
+                  ]}
+                />
+              </div>
+            </section>
+
+            <section id="projects">
+              <h2 className="section-title">Strategic Projects</h2>
+              <div className="project-grid">
+                <ProjectCard 
+                  badge="Real Estate Private Equity"
+                  title="BlackStone Portfolio Valuation"
+                  description="Built an integrated financial model for a $100M+ multi-family portfolio (567 units), projecting 10-year DCF cash flows and analyzing cap rate sensitivities."
+                />
+                <ProjectCard 
+                  badge="Equity Research"
+                  title="AMD Financial Analysis"
+                  description="Conducted 3-statement analysis identifying 12.3% QoQ growth and operating income expansion. Synthesized SWOT and regulatory risks into a thesis."
+                />
+              </div>
+            </section>
+
+            <section id="skills">
+              <h2 className="section-title">Capabilities</h2>
+              <div className="skills-container">
+                <div className="skill-category">
+                  <h4>Valuation & Analysis</h4>
+                  <ul className="skill-list">
+                    <li>DCF / LBO Modeling</li>
+                    <li>Trading Comparables</li>
+                    <li>Statement Consolidation</li>
+                    <li>Ratio & Margin Analysis</li>
+                    <li>Equity Research</li>
+                  </ul>
+                </div>
+                <div className="skill-category">
+                  <h4>Technical Stack</h4>
+                  <ul className="skill-list">
+                    <li>Expert Excel (VLOOKUP, Pivots)</li>
+                    <li>Advanced PowerPoint (Pitch Decks)</li>
+                    <li>Python (NumPy, Pandas)</li>
+                    <li>Financial Data Structuring</li>
+                  </ul>
+                </div>
+                <div className="skill-category">
+                  <h4>Leadership</h4>
+                  <ul className="skill-list">
+                    <li>Fordham Alternative Investment Club</li>
+                    <li>Global Markets Student Organization</li>
+                    <li>Public Speaking & Presentation</li>
+                    <li>Multi-Cultural Team Collaboration</li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            <section id="contact" style={{ paddingBottom: '150px' }}>
+              <div className="crystal-panel" style={{ padding: '100px 50px', textAlign: 'center', border: '1px solid var(--accent-primary)' }}>
+                <span className="hero-subtitle">Available for Opportunities</span>
+                <h2 style={{ fontSize: '4rem', marginBottom: '30px' }}>Let's Connect.</h2>
+                <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 50px auto' }}>
+                  Currently seeking opportunities in Investment Banking and Corporate Finance where I can contribute to high-impact transactions.
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
+                  <a href="mailto:np66@fordham.edu" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', fontWeight: 600 }}>
+                    <Globe size={20} color="var(--accent-primary)" /> np66@fordham.edu
+                  </a>
+                  <span style={{ color: 'var(--glass-border)' }}>|</span>
+                  <a href="tel:+13474316033" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', fontWeight: 600 }}>
+                    <Phone size={20} color="var(--accent-primary)" /> +1 (347) 431-6033
+                  </a>
+                </div>
               </div>
             </section>
             
-            <section id="contact" style={{ padding: '150px 0 100px 0', textAlign: 'center' }}>
-              <div className="crystal-panel" style={{ padding: '120px 40px', background: '#0f172a', color: 'white' }}>
-                <h2 style={{ fontSize: '4.5rem', fontWeight: 800 }}>Let's Build.</h2>
-                <motion.a href="mailto:contact@tuanle.dev" className="crystal-panel" style={{ padding: '22px 70px', background: 'white', color: 'black', textDecoration: 'none', fontWeight: 900, display: 'inline-block', marginTop: '40px' }}>
-                  Start Conversation
-                </motion.a>
-              </div>
-            </section>
+            <footer style={{ padding: '50px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.8rem', letterSpacing: '2px', textTransform: 'uppercase' }}>
+              © 2026 NGUYEN TRONG MINH PHAM • FORDHAM UNIVERSITY
+            </footer>
           </main>
         </motion.div>
       )}
