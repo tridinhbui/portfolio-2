@@ -6,11 +6,108 @@ import {
   BarChart3,
   PieChart,
   Globe,
-  Phone
+  Phone,
+  MessageSquare,
+  X,
+  Send
 } from 'lucide-react';
 
 import profileImg from './assets/hero.png';
 import './index.css';
+
+const questions = [
+  { 
+    q: "What is your investment thesis?", 
+    a: "I focus on value-driven investment analysis, primarily using DCF and comparable company analysis to identify margin of safety in large-cap equities." 
+  },
+  { 
+    q: "Tell me about your valuation project.", 
+    a: "I built an integrated real estate financial model for a $100M+ portfolio, projecting 10-year DCF cash flows and analyzing cap rate sensitivities." 
+  },
+  { 
+    q: "Are you looking for IB internships?", 
+    a: "Yes, I am currently seeking opportunities in Investment Banking and Corporate Finance where I can contribute to high-impact transaction teams." 
+  },
+  { 
+    q: "What technical skills do you have?", 
+    a: "I am proficient in 3-statement modeling, DCF, LBO basics, and advanced Excel (Pivots, VLOOKUP). I also have basic Python skills for data analysis." 
+  }
+];
+
+const ChatBot = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    { text: "Hello! I'm Minh's Virtual Assistant. How can I help you learn more about his finance background today?", sender: 'bot' }
+  ]);
+  const [isTyping, setIsTyping] = useState(false);
+
+  const handleApplyQuestion = (qObj: any) => {
+    setMessages(prev => [...prev, { text: qObj.q, sender: 'user' }]);
+    setIsTyping(true);
+    
+    setTimeout(() => {
+      setMessages(prev => [...prev, { text: qObj.a, sender: 'bot' }]);
+      setIsTyping(false);
+    }, 1000);
+  };
+
+  return (
+    <>
+      <motion.div 
+        className="chat-bubble"
+        onClick={() => setIsOpen(!isOpen)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        {isOpen ? <X size={24} /> : <MessageSquare size={24} />}
+      </motion.div>
+
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div 
+            className="chatbot-container"
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+          >
+            <div className="chat-window">
+              <div className="chat-header">
+                <h4>Finance Assistant</h4>
+                <div style={{ width: '8px', height: '8px', background: '#22c55e', borderRadius: '50%' }} />
+              </div>
+              <div className="chat-body">
+                {messages.map((m, i) => (
+                  <motion.div 
+                    key={i} 
+                    className={`msg msg-${m.sender}`}
+                    initial={{ opacity: 0, x: m.sender === 'bot' ? -10 : 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                  >
+                    {m.text}
+                  </motion.div>
+                ))}
+                {isTyping && (
+                  <div className="msg msg-bot" style={{ opacity: 0.6 }}>typing...</div>
+                )}
+              </div>
+              <div className="chat-footer">
+                {questions.map((q, i) => (
+                  <button 
+                    key={i} 
+                    className="suggestion-chip"
+                    onClick={() => handleApplyQuestion(q)}
+                  >
+                    {q.q}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
 
 const LoadingScreen = () => {
   const [progress, setProgress] = useState(0);
@@ -163,7 +260,7 @@ function App() {
                   <span className="gradient-text">Minh Pham</span>
                 </h1>
                 
-                <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '50px', maxWidth: '600px', fontWeight: 300, lineHeight: '1.8' }}>
+                <p style={{ fontSize: '1.2rem', color: 'var(--text-muted)', marginBottom: '50px', maxWidth: '600px', fontWeight: 300, lineHeight: '2' }}>
                   Strategic analyst focused on <span style={{ color: 'white' }}>Investment Banking</span> and <span style={{ color: 'white' }}>Capital Markets</span>. 
                   Leveraging rigorous financial modeling to drive value in high-stakes environments.
                 </p>
@@ -338,6 +435,8 @@ function App() {
               © 2026 NGUYEN TRONG MINH PHAM • FORDHAM UNIVERSITY
             </footer>
           </main>
+          
+          <ChatBot />
         </motion.div>
       )}
     </div>
