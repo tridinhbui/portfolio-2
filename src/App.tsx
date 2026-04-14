@@ -322,7 +322,7 @@ function App() {
                 <p style={{ color: 'var(--text-muted)', maxWidth: '600px', margin: '0 auto 50px auto' }}>
                   Currently seeking opportunities in Investment Banking and Corporate Finance where I can contribute to high-impact transactions.
                 </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
+                <div className="contact-info" style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
                   <a href="mailto:np66@fordham.edu" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem', fontWeight: 600 }}>
                     <Globe size={20} color="var(--accent-primary)" /> np66@fordham.edu
                   </a>

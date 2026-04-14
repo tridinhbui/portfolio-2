@@ -352,10 +352,28 @@ section {
 /* Responsive */
 @media (max-width: 1024px) {
   .hero { flex-direction: column; text-align: center; padding: 150px 20px; }
-  .hero-title { font-size: 4rem; }
+  .hero-title { font-size: 4.5rem; }
   .main-img-wrapper { width: 100%; max-width: 400px; height: 500px; margin-top: 80px; }
   .exp-card { grid-template-columns: 1fr; gap: 20px; }
   .skills-container { grid-template-columns: 1fr; gap: 40px; }
   nav { padding: 20px; }
   .nav-links { display: none; }
+  #about > div { grid-template-columns: 1fr !important; gap: 50px !important; }
+}
+
+@media (max-width: 768px) {
+  .hero-title { font-size: 3rem; }
+  .section-title { font-size: 2.5rem; }
+  .hero-content { width: 100%; }
+  .project-grid { grid-template-columns: 1fr; }
+  .exp-info h3 { font-size: 1.5rem; }
+  .hero-subtitle { font-size: 0.9rem; letter-spacing: 2px; }
+  .contact-info { flex-direction: column; gap: 20px !important; }
+}
+
+@media (max-width: 480px) {
+  .hero-title { font-size: 2.5rem; }
+  .main-img-wrapper { height: 400px; }
+  section { padding: 60px 20px; }
+  .photo-badge { left: 10px; bottom: 20px; }
 }
