@@ -290,7 +290,7 @@ function App() {
                 transition={{ duration: 1.5, delay: 0.4 }}
               >
                 <div className="main-img-wrapper">
-                  <div className="photo-badge">GPA 3.75 / 4.0</div>
+                  <div className="photo-badge">GPA 3.9 / 4.0</div>
                   <img src={profileImg} alt="Minh Pham" className="main-img" />
                 </div>
               </motion.div>
