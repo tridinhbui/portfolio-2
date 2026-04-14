@@ -8,8 +8,7 @@ import {
   Globe,
   Phone,
   MessageSquare,
-  X,
-  Send
+  X
 } from 'lucide-react';
 
 import profileImg from './assets/hero.png';
